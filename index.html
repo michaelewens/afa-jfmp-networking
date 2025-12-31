@@ -223,6 +223,7 @@
             font-family: Georgia, serif;
             line-height: 1.8;
             color: #333;
+            white-space: pre-wrap;
         }
 
         .button-group {
@@ -298,6 +299,11 @@
             overflow-x: auto;
         }
 
+        .nav-tabs.bottom {
+            border-bottom: none;
+            border-top: 2px solid #e0e0e0;
+        }
+
         .nav-tab {
             padding: 15px 25px;
             cursor: pointer;
@@ -309,6 +315,13 @@
             border-bottom: 3px solid transparent;
             transition: all 0.3s;
             white-space: nowrap;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-tabs.bottom .nav-tab {
+            border-bottom: none;
+            border-top: 3px solid transparent;
         }
 
         .nav-tab:hover {
@@ -322,12 +335,51 @@
             background: white;
         }
 
+        .nav-tabs.bottom .nav-tab.active {
+            border-bottom-color: transparent;
+            border-top-color: #667eea;
+        }
+
         .tab-content {
             display: none;
         }
 
         .tab-content.active {
             display: block;
+        }
+
+        .next-prev-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-nav {
+            padding: 12px 24px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-nav:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-nav:disabled:hover {
+            background: white;
+            color: #667eea;
         }
 
         @media (max-width: 600px) {
@@ -349,6 +401,16 @@
                 padding: 12px 15px;
                 font-size: 0.85rem;
             }
+
+            .next-prev-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn-nav {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -359,11 +421,12 @@
             <p>Build your academic positioning statement, introduction, and outreach strategy</p>
         </header>
 
-        <nav class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('tabA')">A: APS</button>
-            <button class="nav-tab" onclick="showTab('tabB')">B: Introduction</button>
-            <button class="nav-tab" onclick="showTab('tabC')">C: VAS Practice</button>
-            <button class="nav-tab" onclick="showTab('tabD')">D: Follow-Up</button>
+        <!-- Top Navigation Tabs -->
+        <nav class="nav-tabs top" id="navTop">
+            <button class="nav-tab active" data-tab="tabA" onclick="showTab('tabA')">A: APS</button>
+            <button class="nav-tab" data-tab="tabB" onclick="showTab('tabB')">B: Introduction</button>
+            <button class="nav-tab" data-tab="tabC" onclick="showTab('tabC')">C: VAS Practice</button>
+            <button class="nav-tab" data-tab="tabD" onclick="showTab('tabD')">D: Follow-Up</button>
         </nav>
 
         <form id="networkingForm">
@@ -421,6 +484,11 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="next-prev-buttons">
+                            <button type="button" class="btn-nav" disabled>← Previous</button>
+                            <button type="button" class="btn-nav" onclick="showTab('tabB')">Next: Introduction →</button>
+                        </div>
                     </div>
                 </div>
 
@@ -451,6 +519,11 @@
 
                         <div class="practice-prompt">
                             <strong>💡 Practice Prompt:</strong> Say this out loud once. Then shorten it until it fits comfortably in 20 seconds.
+                        </div>
+
+                        <div class="next-prev-buttons">
+                            <button type="button" class="btn-nav" onclick="showTab('tabA')">← Previous: APS</button>
+                            <button type="button" class="btn-nav" onclick="showTab('tabC')">Next: VAS Practice →</button>
                         </div>
                     </div>
                 </div>
@@ -494,6 +567,11 @@
                                 <span class="helper-text"><span class="prefix">If you're open to it, maybe we could</span></span>
                             </label>
                             <textarea id="vasSuggest" placeholder="e.g., grab a coffee at the next conference, or have a 15-minute Zoom call"></textarea>
+                        </div>
+
+                        <div class="next-prev-buttons">
+                            <button type="button" class="btn-nav" onclick="showTab('tabB')">← Previous: Introduction</button>
+                            <button type="button" class="btn-nav" onclick="showTab('tabD')">Next: Follow-Up →</button>
                         </div>
                     </div>
                 </div>
@@ -547,10 +625,23 @@
                         <button type="button" class="btn-preview" onclick="copyEmail()" style="margin-top: 15px; width: 100%;">
                             📋 Copy Email to Clipboard
                         </button>
+
+                        <div class="next-prev-buttons">
+                            <button type="button" class="btn-nav" onclick="showTab('tabC')">← Previous: VAS Practice</button>
+                            <button type="button" class="btn-nav" disabled>Next →</button>
+                        </div>
                     </div>
                 </div>
 
             </div>
+
+            <!-- Bottom Navigation Tabs -->
+            <nav class="nav-tabs bottom" id="navBottom">
+                <button class="nav-tab active" data-tab="tabA" onclick="showTab('tabA')">A: APS</button>
+                <button class="nav-tab" data-tab="tabB" onclick="showTab('tabB')">B: Introduction</button>
+                <button class="nav-tab" data-tab="tabC" onclick="showTab('tabC')">C: VAS Practice</button>
+                <button class="nav-tab" data-tab="tabD" onclick="showTab('tabD')">D: Follow-Up</button>
+            </nav>
 
             <div id="status" class="status"></div>
 
@@ -578,19 +669,28 @@
         ];
         const radioGroups = ['check1', 'check2', 'check3'];
 
-        // Tab navigation
+        // Tab navigation - syncs both top and bottom navs
         function showTab(tabId) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
+            
+            // Remove active from all nav tabs (both top and bottom)
             document.querySelectorAll('.nav-tab').forEach(btn => {
                 btn.classList.remove('active');
             });
 
             // Show selected tab
             document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
+            
+            // Activate corresponding nav tabs in both navs
+            document.querySelectorAll(`.nav-tab[data-tab="${tabId}"]`).forEach(btn => {
+                btn.classList.add('active');
+            });
+
+            // Scroll to top of form content
+            document.querySelector('.form-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // Load data on page load
