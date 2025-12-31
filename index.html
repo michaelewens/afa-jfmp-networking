@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essential Networking Elements Worksheet</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        .form-content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px dashed #e0e0e0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-description {
+            background: #f0f4ff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .prefix {
+            color: #667eea;
+            font-style: italic;
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: #777;
+            font-weight: normal;
+            display: block;
+            margin-top: 4px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        textarea.small {
+            min-height: 60px;
+        }
+
+        .quality-check {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .quality-check h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .check-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .check-item:last-child {
+            border-bottom: none;
+        }
+
+        .check-item span {
+            flex: 1;
+            color: #555;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+        }
+
+        .practice-prompt {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid #f39c12;
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+        }
+
+        .practice-prompt strong {
+            color: #856404;
+        }
+
+        .vas-label {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .email-preview {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .email-preview h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .email-preview-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: Georgia, serif;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 20px 30px 30px;
+            background: #f8f9fa;
+        }
+
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .btn-preview {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin: 0 30px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.info {
+            display: block;
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .check-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .nav-tab {
+                padding: 12px 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Essential Networking Elements</h1>
+            <p>Build your academic positioning statement, introduction, and outreach strategy</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('tabA')">A: APS</button>
+            <button class="nav-tab" onclick="showTab('tabB')">B: Introduction</button>
+            <button class="nav-tab" onclick="showTab('tabC')">C: VAS Practice</button>
+            <button class="nav-tab" onclick="showTab('tabD')">D: Follow-Up</button>
+        </nav>
+
+        <form id="networkingForm">
+            <div class="form-content">
+                
+                <!-- Section A -->
+                <div id="tabA" class="tab-content active">
+                    <div class="section">
+                        <h2 class="section-title">A - My Academic Positioning Statement (APS) | 2 Sentences</h2>
+
+                        <div class="field-group">
+                            <label><span class="prefix">I study</span></label>
+                            <input type="text" id="iStudy" placeholder="e.g., climate change impacts on coastal ecosystems">
+                        </div>
+
+                        <div class="field-group">
+                            <label><span class="prefix">to understand</span></label>
+                            <input type="text" id="toUnderstand" placeholder="e.g., how communities can adapt to rising sea levels">
+                        </div>
+
+                        <div class="field-group">
+                            <label><span class="prefix">My current work focuses on</span></label>
+                            <input type="text" id="currentWork" placeholder="e.g., mapping vulnerable infrastructure in Southeast Asia">
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>Ultra-Short Version (1 sentence):</strong> <span class="prefix">I study</span></label>
+                            <textarea id="ultraShort" placeholder="Combine the above into one concise sentence"></textarea>
+                        </div>
+
+                        <div class="quality-check">
+                            <h3>APS Quality Check</h3>
+
+                            <div class="check-item">
+                                <span>Someone outside my field could understand this</span>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="check1" value="yes"> Yes</label>
+                                    <label><input type="radio" name="check1" value="no"> No</label>
+                                </div>
+                            </div>
+
+                            <div class="check-item">
+                                <span>I can say this comfortably in under 10 seconds</span>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="check2" value="yes"> Yes</label>
+                                    <label><input type="radio" name="check2" value="no"> No</label>
+                                </div>
+                            </div>
+
+                            <div class="check-item">
+                                <span>It reflects what I'm working on <em>now</em></span>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="check3" value="yes"> Yes</label>
+                                    <label><input type="radio" name="check3" value="no"> No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section B -->
+                <div id="tabB" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">B - My 20-Second Introduction</h2>
+
+                        <div class="field-group">
+                            <label><strong>1. Who I am:</strong> <span class="prefix">Hi, I'm</span></label>
+                            <textarea id="whoIAm" placeholder="e.g., Sarah Chen, a third-year PhD student in Environmental Science at UC Berkeley"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>2. What I study:</strong> <span class="prefix">My work focuses on</span></label>
+                            <textarea id="whatIStudy" placeholder="e.g., understanding how mangrove forests protect coastal communities from storm surges"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>3. What I'm working on now:</strong> <span class="prefix">Right now, I'm working on</span></label>
+                            <textarea id="workingOnNow" placeholder="e.g., a field study in the Philippines measuring mangrove root density"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>4. What I'm looking for:</strong> <span class="prefix">I'm hoping to connect with people who</span></label>
+                            <textarea id="lookingFor" placeholder="e.g., work on climate adaptation policy or have experience with community-based conservation"></textarea>
+                        </div>
+
+                        <div class="practice-prompt">
+                            <strong>💡 Practice Prompt:</strong> Say this out loud once. Then shorten it until it fits comfortably in 20 seconds.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section C -->
+                <div id="tabC" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">C - Validate → Align → Suggest (VAS) Practice</h2>
+
+                        <div class="section-description">
+                            Choose <strong>one real person</strong> you want to connect with (conference, department, online, etc.).
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>Name / Context:</strong></label>
+                            <input type="text" id="vasName" placeholder="e.g., Dr. Jane Smith, met at AGU conference">
+                        </div>
+
+                        <div class="field-group">
+                            <label>
+                                <span class="vas-label">VALIDATE</span>
+                                What specifically do I appreciate or notice about their work?
+                                <span class="helper-text"><span class="prefix">I really liked / appreciated</span></span>
+                            </label>
+                            <textarea id="vasValidate" placeholder="e.g., your recent paper on coral reef resilience—especially the community engagement methodology"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label>
+                                <span class="vas-label">ALIGN</span>
+                                Where does my work overlap or complement theirs?
+                                <span class="helper-text"><span class="prefix">That connects with my work on</span></span>
+                            </label>
+                            <textarea id="vasAlign" placeholder="e.g., coastal ecosystem mapping, where I'm also trying to incorporate local knowledge"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label>
+                                <span class="vas-label">SUGGEST</span>
+                                What is one low-pressure next step?
+                                <span class="helper-text"><span class="prefix">If you're open to it, maybe we could</span></span>
+                            </label>
+                            <textarea id="vasSuggest" placeholder="e.g., grab a coffee at the next conference, or have a 15-minute Zoom call"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section D -->
+                <div id="tabD" class="tab-content">
+                    <div class="section">
+                        <h2 class="section-title">D - Draft a Follow-Up Email or Message | Intro + APS + VAS</h2>
+
+                        <div class="section-description">
+                            Combine your introduction, positioning statement, and VAS approach into a complete outreach message.
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>Intro (who I am):</strong> <span class="prefix">Hi,</span></label>
+                            <input type="text" id="emailGreeting" placeholder="e.g., Dr. Smith">
+                        </div>
+
+                        <div class="field-group">
+                            <label><span class="prefix">I'm</span></label>
+                            <textarea id="emailIntro" class="small" placeholder="e.g., Sarah Chen, a PhD student at UC Berkeley studying coastal ecosystems"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>APS (what I study):</strong> <span class="prefix">My research focuses on</span></label>
+                            <textarea id="emailAPS" class="small" placeholder="e.g., understanding how mangrove forests protect coastal communities from climate impacts"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>Validate:</strong> <span class="prefix">I really appreciated</span></label>
+                            <textarea id="emailValidate" class="small" placeholder="e.g., your recent paper on coral reef resilience"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>Align:</strong> <span class="prefix">It connects with my work on</span></label>
+                            <textarea id="emailAlign" class="small" placeholder="e.g., coastal ecosystem mapping"></textarea>
+                        </div>
+
+                        <div class="field-group">
+                            <label><strong>Suggest:</strong> <span class="prefix">If you're open to it,</span></label>
+                            <textarea id="emailSuggest" class="small" placeholder="e.g., I'd love to hear more about your community engagement approach—perhaps a brief call?"></textarea>
+                        </div>
+
+                        <div class="email-preview">
+                            <h3>📧 Email Preview</h3>
+                            <div class="email-preview-content" id="emailPreviewContent">
+                                <em>Fill in the fields above to see your email preview...</em>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-preview" onclick="copyEmail()" style="margin-top: 15px; width: 100%;">
+                            📋 Copy Email to Clipboard
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="status" class="status"></div>
+
+            <div class="button-group">
+                <button type="button" class="btn-save" onclick="saveData()">💾 Save Progress</button>
+                <button type="button" class="btn-pdf" onclick="generatePDF()">📄 Download PDF</button>
+                <button type="button" class="btn-clear" onclick="clearData()">🗑️ Clear All</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'networkingWorksheetFull';
+
+        // Field IDs to save/load
+        const textFields = [
+            // Section A
+            'iStudy', 'toUnderstand', 'currentWork', 'ultraShort',
+            // Section B
+            'whoIAm', 'whatIStudy', 'workingOnNow', 'lookingFor',
+            // Section C
+            'vasName', 'vasValidate', 'vasAlign', 'vasSuggest',
+            // Section D
+            'emailGreeting', 'emailIntro', 'emailAPS', 'emailValidate', 'emailAlign', 'emailSuggest'
+        ];
+        const radioGroups = ['check1', 'check2', 'check3'];
+
+        // Tab navigation
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            updateEmailPreview();
+        });
+
+        // Auto-save and update preview on input
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('input', () => {
+                saveData(true);
+                updateEmailPreview();
+            });
+        });
+
+        function updateEmailPreview() {
+            const greeting = document.getElementById('emailGreeting').value || '[Name]';
+            const intro = document.getElementById('emailIntro').value || '[your introduction]';
+            const aps = document.getElementById('emailAPS').value || '[your research focus]';
+            const validate = document.getElementById('emailValidate').value || '[what you appreciated]';
+            const align = document.getElementById('emailAlign').value || '[how it connects]';
+            const suggest = document.getElementById('emailSuggest').value || '[your suggestion]';
+
+            const preview = `Hi ${greeting},
+
+I'm ${intro}.
+
+My research focuses on ${aps}.
+
+I really appreciated ${validate}. It connects with my work on ${align}.
+
+If you're open to it, ${suggest}
+
+Best regards`;
+
+            document.getElementById('emailPreviewContent').innerText = preview;
+        }
+
+        function copyEmail() {
+            const emailText = document.getElementById('emailPreviewContent').innerText;
+            navigator.clipboard.writeText(emailText).then(() => {
+                showStatus('📋 Email copied to clipboard!', 'success');
+            }).catch(() => {
+                showStatus('❌ Failed to copy. Please select and copy manually.', 'info');
+            });
+        }
+
+        function saveData(silent = false) {
+            const data = {};
+
+            textFields.forEach(id => {
+                data[id] = document.getElementById(id).value;
+            });
+
+            radioGroups.forEach(name => {
+                const selected = document.querySelector(`input[name="${name}"]:checked`);
+                data[name] = selected ? selected.value : '';
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            if (!silent) {
+                showStatus('✅ Progress saved successfully!', 'success');
+            }
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            textFields.forEach(id => {
+                if (data[id]) {
+                    document.getElementById(id).value = data[id];
+                }
+            });
+
+            radioGroups.forEach(name => {
+                if (data[name]) {
+                    const radio = document.querySelector(`input[name="${name}"][value="${data[name]}"]`);
+                    if (radio) radio.checked = true;
+                }
+            });
+
+            showStatus('📂 Previous progress loaded!', 'info');
+        }
+
+        function clearData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                document.getElementById('networkingForm').reset();
+                updateEmailPreview();
+                showStatus('🗑️ All data cleared!', 'success');
+            }
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const margin = 20;
+            let y = 20;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const contentWidth = pageWidth - (margin * 2);
+
+            function addWrappedText(text, x, startY, maxWidth, lineHeight = 6) {
+                const lines = doc.splitTextToSize(text, maxWidth);
+                lines.forEach(line => {
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                    doc.text(line, x, y);
+                    y += lineHeight;
+                });
+                return y;
+            }
+
+            function checkPageBreak(needed = 30) {
+                if (y > 270 - needed) {
+                    doc.addPage();
+                    y = 20;
+                }
+            }
+
+            function getValue(id) {
+                return document.getElementById(id).value || '[Not filled]';
+            }
+
+            function getRadio(name) {
+                const selected = document.querySelector(`input[name="${name}"]:checked`);
+                return selected ? selected.value.toUpperCase() : 'N/A';
+            }
+
+            // Title
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Essential Networking Elements Worksheet', margin, y);
+            y += 15;
+
+            // ========== SECTION A ==========
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('A - My Academic Positioning Statement (APS)', margin, y);
+            y += 10;
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('I study:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText(getValue('iStudy'), margin, y, contentWidth);
+            y += 3;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('to understand:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText(getValue('toUnderstand'), margin, y, contentWidth);
+            y += 3;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('My current work focuses on:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText(getValue('currentWork'), margin, y, contentWidth);
+            y += 3;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Ultra-Short Version:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('I study ' + getValue('ultraShort'), margin, y, contentWidth);
+            y += 6;
+
+            // Quality Check
+            doc.setFont('helvetica', 'bold');
+            doc.text('APS Quality Check:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 6;
+
+            const checks = [
+                { name: 'check1', label: 'Someone outside my field could understand this' },
+                { name: 'check2', label: 'I can say this comfortably in under 10 seconds' },
+                { name: 'check3', label: 'It reflects what I\'m working on now' }
+            ];
+
+            checks.forEach(check => {
+                doc.text(`• ${check.label}: ${getRadio(check.name)}`, margin, y);
+                y += 5;
+            });
+
+            y += 10;
+            checkPageBreak();
+
+            // ========== SECTION B ==========
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('B - My 20-Second Introduction', margin, y);
+            y += 10;
+
+            doc.setFontSize(10);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('1. Who I am:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('Hi, I\'m ' + getValue('whoIAm'), margin, y, contentWidth);
+            y += 3;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('2. What I study:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('My work focuses on ' + getValue('whatIStudy'), margin, y, contentWidth);
+            y += 3;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('3. What I\'m working on now:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('Right now, I\'m working on ' + getValue('workingOnNow'), margin, y, contentWidth);
+            y += 3;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('4. What I\'m looking for:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('I\'m hoping to connect with people who ' + getValue('lookingFor'), margin, y, contentWidth);
+            y += 8;
+
+            // Full 20-second intro box
+            checkPageBreak(40);
+            doc.setFillColor(245, 245, 245);
+            doc.rect(margin - 2, y - 2, contentWidth + 4, 35, 'F');
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Complete 20-Second Introduction:', margin, y + 4);
+            doc.setFont('helvetica', 'italic');
+            y += 10;
+
+            const fullIntro = `Hi, I'm ${getValue('whoIAm')}. My work focuses on ${getValue('whatIStudy')}. Right now, I'm working on ${getValue('workingOnNow')}. I'm hoping to connect with people who ${getValue('lookingFor')}.`;
+            addWrappedText(fullIntro, margin, y, contentWidth, 5);
+
+            y += 15;
+            checkPageBreak();
+
+            // ========== SECTION C ==========
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('C - Validate > Align > Suggest (VAS) Practice', margin, y);
+            y += 10;
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Name / Context:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText(getValue('vasName'), margin, y, contentWidth);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('VALIDATE - What I appreciate about their work:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('I really liked / appreciated ' + getValue('vasValidate'), margin, y, contentWidth);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('ALIGN - Where my work overlaps:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('That connects with my work on ' + getValue('vasAlign'), margin, y, contentWidth);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('SUGGEST - Low-pressure next step:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('If you\'re open to it, maybe we could ' + getValue('vasSuggest'), margin, y, contentWidth);
+
+            y += 15;
+            checkPageBreak();
+
+            // ========== SECTION D ==========
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('D - Draft Follow-Up Email | Intro + APS + VAS', margin, y);
+            y += 10;
+
+            doc.setFontSize(10);
+
+            // Email fields
+            doc.setFont('helvetica', 'bold');
+            doc.text('Intro (who I am):', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('Hi, ' + getValue('emailGreeting') + '. I\'m ' + getValue('emailIntro'), margin, y, contentWidth);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('APS (what I study):', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('My research focuses on ' + getValue('emailAPS'), margin, y, contentWidth);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Validate:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('I really appreciated ' + getValue('emailValidate'), margin, y, contentWidth);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Align:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('It connects with my work on ' + getValue('emailAlign'), margin, y, contentWidth);
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Suggest:', margin, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            addWrappedText('If you\'re open to it, ' + getValue('emailSuggest'), margin, y, contentWidth);
+
+            y += 10;
+            checkPageBreak(50);
+
+            // Complete email box
+            doc.setFillColor(240, 244, 255);
+            doc.rect(margin - 2, y - 2, contentWidth + 4, 55, 'F');
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Complete Email Draft:', margin, y + 4);
+            doc.setFont('helvetica', 'normal');
+            y += 10;
+
+            const fullEmail = `Hi ${getValue('emailGreeting')},
+
+I'm ${getValue('emailIntro')}. My research focuses on ${getValue('emailAPS')}.
+
+I really appreciated ${getValue('emailValidate')}. It connects with my work on ${getValue('emailAlign')}.
+
+If you're open to it, ${getValue('emailSuggest')}
+
+Best regards`;
+
+            addWrappedText(fullEmail, margin, y, contentWidth, 5);
+
+            // Footer
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(128, 128, 128);
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.text(`Generated on ${new Date().toLocaleDateString()} | Page ${i} of ${pageCount}`, margin, 287);
+            }
+
+            doc.save('networking-elements-worksheet.pdf');
+            showStatus('📄 PDF downloaded successfully!', 'success');
+        }
+    </script>
+</body>
+</html>
