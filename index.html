@@ -226,6 +226,84 @@
             white-space: pre-wrap;
         }
 
+        /* Summary Box Styles */
+        .summary-box {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d6eaf8 100%);
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-box h3 {
+            color: #2980b9;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-box h3::before {
+            content: "📝";
+        }
+
+        .summary-section {
+            margin-bottom: 15px;
+        }
+
+        .summary-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-section-title {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #bdd8eb;
+        }
+
+        .summary-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .summary-list li {
+            padding: 8px 0 8px 20px;
+            position: relative;
+            color: #444;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .summary-list li::before {
+            content: "•";
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 5px;
+        }
+
+        .summary-list li strong {
+            color: #2c3e50;
+        }
+
+        .summary-list li .empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .summary-list li .value {
+            color: #333;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline;
+        }
+
         .button-group {
             display: flex;
             gap: 15px;
@@ -380,6 +458,17 @@
         .btn-nav:disabled:hover {
             background: white;
             color: #667eea;
+        }
+
+        .btn-nav.btn-export {
+            border-color: #764ba2;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-nav.btn-export:hover {
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
         }
 
         @media (max-width: 600px) {
@@ -581,8 +670,43 @@
                     <div class="section">
                         <h2 class="section-title">D - Draft a Follow-Up Email or Message | Intro + APS + VAS</h2>
 
+                        <!-- Summary Box -->
+                        <div class="summary-box">
+                            <h3>Here is what you wrote</h3>
+                            
+                            <div class="summary-section">
+                                <div class="summary-section-title">Section A: Academic Positioning Statement</div>
+                                <ul class="summary-list">
+                                    <li><strong>I study:</strong> <span id="summaryIStudy" class="value"></span></li>
+                                    <li><strong>to understand:</strong> <span id="summaryToUnderstand" class="value"></span></li>
+                                    <li><strong>Current work focuses on:</strong> <span id="summaryCurrentWork" class="value"></span></li>
+                                    <li><strong>Ultra-short version:</strong> <span id="summaryUltraShort" class="value"></span></li>
+                                </ul>
+                            </div>
+
+                            <div class="summary-section">
+                                <div class="summary-section-title">Section B: 20-Second Introduction</div>
+                                <ul class="summary-list">
+                                    <li><strong>Who I am:</strong> <span id="summaryWhoIAm" class="value"></span></li>
+                                    <li><strong>What I study:</strong> <span id="summaryWhatIStudy" class="value"></span></li>
+                                    <li><strong>Working on now:</strong> <span id="summaryWorkingOnNow" class="value"></span></li>
+                                    <li><strong>Looking for:</strong> <span id="summaryLookingFor" class="value"></span></li>
+                                </ul>
+                            </div>
+
+                            <div class="summary-section">
+                                <div class="summary-section-title">Section C: VAS Practice</div>
+                                <ul class="summary-list">
+                                    <li><strong>Name / Context:</strong> <span id="summaryVasName" class="value"></span></li>
+                                    <li><strong>Validate:</strong> <span id="summaryVasValidate" class="value"></span></li>
+                                    <li><strong>Align:</strong> <span id="summaryVasAlign" class="value"></span></li>
+                                    <li><strong>Suggest:</strong> <span id="summaryVasSuggest" class="value"></span></li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div class="section-description">
-                            Combine your introduction, positioning statement, and VAS approach into a complete outreach message.
+                            Use the information above to draft your follow-up email. Combine your introduction, positioning statement, and VAS approach into a complete outreach message.
                         </div>
 
                         <div class="field-group">
@@ -628,7 +752,7 @@
 
                         <div class="next-prev-buttons">
                             <button type="button" class="btn-nav" onclick="showTab('tabC')">← Previous: VAS Practice</button>
-                            <button type="button" class="btn-nav" disabled>Next →</button>
+                            <button type="button" class="btn-nav btn-export" onclick="generatePDF()">📄 Export to PDF</button>
                         </div>
                     </div>
                 </div>
@@ -669,6 +793,38 @@
         ];
         const radioGroups = ['check1', 'check2', 'check3'];
 
+        // Summary field mappings
+        const summaryMappings = {
+            'iStudy': 'summaryIStudy',
+            'toUnderstand': 'summaryToUnderstand',
+            'currentWork': 'summaryCurrentWork',
+            'ultraShort': 'summaryUltraShort',
+            'whoIAm': 'summaryWhoIAm',
+            'whatIStudy': 'summaryWhatIStudy',
+            'workingOnNow': 'summaryWorkingOnNow',
+            'lookingFor': 'summaryLookingFor',
+            'vasName': 'summaryVasName',
+            'vasValidate': 'summaryVasValidate',
+            'vasAlign': 'summaryVasAlign',
+            'vasSuggest': 'summaryVasSuggest'
+        };
+
+        // Update summary box
+        function updateSummary() {
+            for (const [fieldId, summaryId] of Object.entries(summaryMappings)) {
+                const value = document.getElementById(fieldId).value;
+                const summaryEl = document.getElementById(summaryId);
+                
+                if (value.trim()) {
+                    summaryEl.textContent = value;
+                    summaryEl.classList.remove('empty');
+                } else {
+                    summaryEl.textContent = '[Not yet filled]';
+                    summaryEl.classList.add('empty');
+                }
+            }
+        }
+
         // Tab navigation - syncs both top and bottom navs
         function showTab(tabId) {
             // Hide all tabs
@@ -689,6 +845,11 @@
                 btn.classList.add('active');
             });
 
+            // Update summary when switching to tab D
+            if (tabId === 'tabD') {
+                updateSummary();
+            }
+
             // Scroll to top of form content
             document.querySelector('.form-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -697,6 +858,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
             updateEmailPreview();
+            updateSummary();
         });
 
         // Auto-save and update preview on input
@@ -704,6 +866,7 @@
             el.addEventListener('input', () => {
                 saveData(true);
                 updateEmailPreview();
+                updateSummary();
             });
         });
 
@@ -785,6 +948,7 @@ Best regards`;
                 localStorage.removeItem(STORAGE_KEY);
                 document.getElementById('networkingForm').reset();
                 updateEmailPreview();
+                updateSummary();
                 showStatus('🗑️ All data cleared!', 'success');
             }
         }
